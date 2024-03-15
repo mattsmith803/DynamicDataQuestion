@@ -1,4 +1,6 @@
-﻿using ReactiveUI;
+﻿using System.Collections.ObjectModel;
+using DynamicData;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 namespace DynamicDataQuestion.ViewModels
@@ -7,13 +9,19 @@ namespace DynamicDataQuestion.ViewModels
     {
         public string Name { get; set; }
         [Reactive] public bool IsSelected { get; set; }
-        public List<TestClass> TestClassList { get; set; } = new List<TestClass>();
+        public SourceList<TestClass> TestClassesSource { get; set; }
 
         public TestGroupClass(string name, bool isSelected, List<TestClass> testClassList)
         {
             Name = name;
             IsSelected = isSelected;
-            TestClassList = testClassList;
+
+            TestClassesSource = new SourceList<TestClass>();
+
+            TestClassesSource.Edit(list =>
+            {
+                list.AddRange(testClassList);
+            });
         }
     }
 }
